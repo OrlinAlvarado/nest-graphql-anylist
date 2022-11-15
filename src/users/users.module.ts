@@ -17,7 +17,7 @@ import { ItemsModule } from '../items/items.module'
     ItemsModule
   ],
   exports: [
-    // TypeOrmModule,
+    TypeOrmModule,
     UsersService
   ]
 })

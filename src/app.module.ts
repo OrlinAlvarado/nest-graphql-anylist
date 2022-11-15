@@ -10,6 +10,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { async } from 'rxjs';
 import { JwtService } from '@nestjs/jwt'
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -60,6 +61,7 @@ import { JwtService } from '@nestjs/jwt'
     ItemsModule,
     UsersModule,
     AuthModule,
+    SeedModule,
   ],
   controllers: [],
   providers: [],
