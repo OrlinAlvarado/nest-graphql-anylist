@@ -6,6 +6,7 @@ import { SignupInput } from '../auth/dto/inputs/signup.input';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ValidRoles } from '../auth/enums/valid-roles.enum'
+import { PaginationArgs, SearchArgs } from '../common/dto/args'
 
 @Injectable()
 export class UsersService {
@@ -29,19 +30,30 @@ export class UsersService {
     }
   }
 
-  async findAll( roles: ValidRoles[]): Promise<User[]> {
+  async findAll( 
+    roles: ValidRoles[], 
+    paginationArgs: PaginationArgs, 
+    searchArgs: SearchArgs
+  ): Promise<User[]> {
 
-    if (roles.length === 0) return this.usersRepository.find({
-        // TODO: No es necesario por tenemos lazy esta propiedad
-        // relations: {
-        //   lastUpdatedBy: true
-        // }
-      });
+    const { limit, offset } = paginationArgs
+    const { search } =  searchArgs
 
-    return this.usersRepository.createQueryBuilder()
+    const queryBuilder = this.usersRepository.createQueryBuilder()
+      .limit( limit )
+      .take( offset )
+
+    if (roles.length !== 0) {
+      queryBuilder
       .andWhere('ARRAY[roles] && ARRAY[:...roles]')
       .setParameter('roles', roles)
-      .getMany()
+    } 
+
+    if (search) {
+      queryBuilder.andWhere('LOWER(fullName) like :name', { name: `%${ search.toLowerCase() }%`})  
+    }
+
+    return await queryBuilder.getMany()
 
   }
 
