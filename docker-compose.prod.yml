@@ -28,6 +28,7 @@ services:
       - "${PORT}:${PORT}"
 
     environment:
+      STATE: ${STATE}
       DB_PASSWORD: ${DB_PASSWORD}
       DB_NAME: ${DB_NAME}
       DB_HOST: ${DB_HOST}
