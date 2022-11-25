@@ -4,6 +4,7 @@
 
 /postgres
 .env
+.env.prod
 
 # Logs
 logs
